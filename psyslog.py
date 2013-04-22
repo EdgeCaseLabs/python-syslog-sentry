@@ -1,27 +1,19 @@
 #!/usr/bin/python
 
-## Tiny Syslog Server in Python.
-##
-## This is a tiny syslog server that is able to receive UDP based syslog
-## entries on a specified port and save them to a HotQueue in Redis
-#
-#Org file at https://gist.github.com/marcelom/4218010
-#
+SENTRY_DSN = '<SENTRY DSN>'
+HOST = "0.0.0.0"
+PORT = 514
 
 import SocketServer
 import time
 from raven import Client
 
-
-
-client = Client('<SENTRY DSN>')
-HOST, PORT = "0.0.0.0", 514
-
+client = Client(SENTRY_DSN)
 
 class SyslogUDPHandler(SocketServer.BaseRequestHandler):
 
 	def handle(self):
-		
+		global client
 		data = bytes.decode(self.request[0].strip())
 
 		laengde = len(data)
